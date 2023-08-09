@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Materi 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app">
+        <main>
+            <h2>{{ message }}</h2>
+            <p v-if="!todos.length">
+                Masukan todo!
+            </p>
+            <ol>
+                <li v-for="todo in todos">
+                    {{ todo }}
+                </li>
+            </ol>
+            <div>
+                <form @submit="addTodo($event)">
+                    <input type="text" class="input" name="title" id="title" v-model="title">
+                    <button class="button" type="submit">Tambahkan</button>
+                    <p>{{ status }}</p>
+                </form> 
+            </div>
+        </main>
+    </div>
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script type="text/javascript">
+        var app = new Vue({
+            el: "#app",
+            data: {
+                title: "",
+                message: "Todo List:",
+                todos: []
+            },
+            computed: {
+                status: function() {
+                    if(this.todos.length >= 4) {
+                        return "Hebat!";
+                    }
+
+                    return "";
+                }
+            },
+            methods: {
+                addTodo: function(event) {
+                    event.preventDefault();
+
+                    if(this.title === "") {
+                        return false;
+                    }
+
+                    this.todos.push(this.title);
+                    this.title = "";
+                }
+            }
+        })
+    </script>
+</body>
+</html>
