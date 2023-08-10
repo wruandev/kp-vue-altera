@@ -1,4 +1,24 @@
 # kp-vue-altera
 
-- [Latihan Materi 1](https://github.com/wruandev/kp-vue-altera/tree/latihan-materi-1)
-- [Latihan Materi 2](https://github.com/wruandev/kp-vue-altera/tree/latihan-materi-2)
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
