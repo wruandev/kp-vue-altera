@@ -1,32 +1,33 @@
 <template>
-  <main>
+  <main class="main">
     <h1>Todo List</h1>
 
-    <TodoList :todos="todos"></TodoList>
+    <TodoList
+      :todos="todos"
+      @update-todo="updateTodo"
+      @delete-todo="deleteTodo"
+    ></TodoList>
 
-    <form class="form" @submit="addTodo($event)">
-      <input
-        type="text"
-        class="input"
-        name="title"
-        id="title"
-        placeholder="Contoh: Menjemur baju..."
-        v-model="title"
-      />
-      <button class="button" type="submit">Tambahkan</button>
-      <p class="error" v-if="showError">Input tidak boleh kosong!</p>
-      <p>{{ status }}</p>
-    </form>
+    <TodoForm
+      v-model="title"
+      :showError="showError"
+      :status="status"
+      @add-todo="addTodo"
+    />
+
+    <p>{{ status }}</p>
   </main>
 </template>
 
 <script>
+import TodoForm from "./TodoForm.vue";
 import TodoList from "./TodoList.vue";
 
 export default {
   name: "TodoContainer",
   components: {
     TodoList,
+    TodoForm,
   },
   data() {
     return {
@@ -45,32 +46,42 @@ export default {
     },
   },
   methods: {
-    addTodo: function (event) {
-      event.preventDefault();
-
+    addTodo: function () {
       if (!this.title) {
         this.showError = true;
         return false;
       }
 
-      this.todos.push(this.title);
+      const newTodo = {
+        id: Date.now(),
+        title: this.title,
+      };
+
+      this.todos.push(newTodo);
       this.title = "";
       this.showError = false;
+    },
+    updateTodo(updatedTodo) {
+      this.todos = this.todos.map((todo) => {
+        if (todo.id === updatedTodo.id) {
+          return {
+            ...todo,
+            title: updatedTodo.newTitle,
+          };
+        }
+
+        return todo;
+      });
+    },
+    deleteTodo(id) {
+      this.todos = this.todos.filter((todo) => todo.id !== id);
     },
   },
 };
 </script>
 
 <style scoped>
-.error {
-  color: #ff0000;
-}
-.input {
-  padding: 10px;
-  margin-right: 5px;
-}
-
-.button {
-  padding: 10px;
+.main {
+  width: 100%;
 }
 </style>
