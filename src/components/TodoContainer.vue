@@ -1,19 +1,10 @@
 <template>
-  <main class="main">
-    <h1>Todo List</h1>
+  <main class="w-100 p-5" id="main">
+    <h1 class="page-title">Todo List</h1>
 
-    <TodoList
-      :todos="todos"
-      @update-todo="updateTodo"
-      @delete-todo="deleteTodo"
-    ></TodoList>
+    <TodoList :todos="todos" />
 
-    <TodoForm
-      v-model="title"
-      :showError="showError"
-      :status="status"
-      @add-todo="addTodo"
-    />
+    <TodoForm />
 
     <p>{{ status }}</p>
   </main>
@@ -29,14 +20,10 @@ export default {
     TodoList,
     TodoForm,
   },
-  data() {
-    return {
-      title: "",
-      showError: false,
-      todos: [],
-    };
-  },
   computed: {
+    todos: function () {
+      return this.$store.state.todos;
+    },
     status: function () {
       if (this.todos.length >= 4) {
         return "Hebat!";
@@ -45,43 +32,12 @@ export default {
       return "";
     },
   },
-  methods: {
-    addTodo: function () {
-      if (!this.title) {
-        this.showError = true;
-        return false;
-      }
-
-      const newTodo = {
-        id: Date.now(),
-        title: this.title,
-      };
-
-      this.todos.push(newTodo);
-      this.title = "";
-      this.showError = false;
-    },
-    updateTodo(updatedTodo) {
-      this.todos = this.todos.map((todo) => {
-        if (todo.id === updatedTodo.id) {
-          return {
-            ...todo,
-            title: updatedTodo.newTitle,
-          };
-        }
-
-        return todo;
-      });
-    },
-    deleteTodo(id) {
-      this.todos = this.todos.filter((todo) => todo.id !== id);
-    },
-  },
 };
 </script>
 
 <style scoped>
-.main {
-  width: 100%;
+.page-title {
+  text-align: center;
+  text-decoration: underline;
 }
 </style>

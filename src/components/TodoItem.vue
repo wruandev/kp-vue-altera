@@ -1,7 +1,7 @@
 <template>
-  <div class="flex">
-    <div class="todo-content">
-      <li v-if="!isEditing">
+  <div id="todo-content">
+    <div class="w-80">
+      <li v-if="!isEditing" @click="redirectDetail" class="todo-item">
         {{ todo.title }}
       </li>
 
@@ -9,7 +9,7 @@
         <form @submit.prevent="toggleEditForm">
           <input
             type="text"
-            class="input"
+            class="p-10 me-5 w-100"
             placeholder="Input tidak boleh kosong!"
             :value="todoTitle"
             @input="updateTodo($event)"
@@ -18,8 +18,8 @@
       </li>
     </div>
     <div>
-      <button class="button" @click="deleteTodo">Hapus</button>
-      <button class="button" @click="toggleEditForm">Edit</button>
+      <button class="p-10 ms-5 me-5" @click="deleteTodo">Hapus</button>
+      <button class="p-10 ms-5 me-5" @click="toggleEditForm">Edit</button>
     </div>
   </div>
 </template>
@@ -41,18 +41,20 @@ export default {
 
       this.isEditing = !this.isEditing;
     },
-    updateTodo(event) {
+    async updateTodo(event) {
       this.todoTitle = event.target.value;
 
-      this.$emit("update-todo", {
+      await this.$store.dispatch("updateTodo", {
+        title: this.todoTitle,
         id: this.todo.id,
-        newTitle: this.todoTitle,
+        description: this.todo.description,
       });
     },
-    deleteTodo() {
-      this.$emit("delete-todo", this.todo.id);
-    },
+    async deleteTodo() {
+      const deletedId = this.todo.id;
 
+      await this.$store.dispatch("removeTodo", deletedId);
+    },
     checkInput() {
       if (!this.todoTitle) {
         alert("Input tidak boleh kosong");
@@ -60,6 +62,9 @@ export default {
       }
 
       return true;
+    },
+    redirectDetail() {
+      this.$router.push({ name: "detail", params: { id: this.todo.id } });
     },
   },
   props: {
@@ -69,7 +74,7 @@ export default {
 </script>
 
 <style scoped>
-.flex {
+#todo-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -77,22 +82,8 @@ export default {
   margin-bottom: 10px;
 }
 
-.todo-content {
-  width: 80%;
-}
-
-.error {
-  color: #ff0000;
-}
-.input {
-  padding: 10px;
-  margin-right: 5px;
-  width: 100%;
-}
-
-.button {
-  padding: 10px;
-  margin-left: 5px;
-  margin-right: 5px;
+.todo-item:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>

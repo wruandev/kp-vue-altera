@@ -1,15 +1,9 @@
 <template>
-  <div class="todo-list">
+  <div>
     <p v-if="!showTodos">Belum ada data!</p>
 
-    <ol v-if="showTodos">
-      <TodoItem
-        v-for="todo in todos"
-        :key="todo.id"
-        :todo="todo"
-        @update-todo="updateTodo"
-        @delete-todo="deleteTodo"
-      />
+    <ol v-if="showTodos" class="todo-list">
+      <TodoItem v-for="todo in todos" :key="todo.id" :todo="todo" />
     </ol>
   </div>
 </template>
@@ -23,22 +17,18 @@ export default {
     TodoItem,
   },
   computed: {
+    todos: function () {
+      return this.$store.state.todos;
+    },
     showTodos: function () {
       return this.todos.length > 0;
-    },
-  },
-  props: {
-    todos: Array,
-  },
-  methods: {
-    updateTodo(updatedTodo) {
-      this.$emit("update-todo", updatedTodo);
-    },
-    deleteTodo(id) {
-      this.$emit("delete-todo", id);
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.todo-list {
+  padding-left: 20px;
+}
+</style>
